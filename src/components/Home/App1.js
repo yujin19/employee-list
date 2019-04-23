@@ -1,11 +1,15 @@
-import React, { Component } from "react";
-import ListRow from "./ListRow.js";
-import ReduxLazyScroll from "redux-lazy-scroll";
+import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import ListRow from "./ListRow";
 
-//const sort = ["name", "dr"];
+// const style = {
+//   height: 30,
+//   border: "1px solid green",
+//   margin: 6,
+//   padding: 8
+// };
 
-class EmployeesList extends Component {
+class App1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +20,9 @@ class EmployeesList extends Component {
     };
   }
 
+  // componentWillMount() {
+  //   this.loadItems();
+  // }
   nameSort = () => {
     // this.props.setSort("name");
     // this.setState(
@@ -75,8 +82,6 @@ class EmployeesList extends Component {
   handleDelete = id => {
     //console.log("handle delete" + id);
     this.props.onDelete(id);
-    //this.props.onLoad(1);
-    //this.props.setResultField("getEmployees"); //set back resultField
     this.props.onLoad(this.props.page);
   };
 
@@ -86,10 +91,21 @@ class EmployeesList extends Component {
       this.props.onLoad(this.props.page);
     }
   };
-
-  // componentDidMount() {
-  //   this.props.onLoad(1);
-  // }
+  fetchMoreData = () => {
+    // if (this.props.employees.length >= 500) {
+    //   this.setState({ hasMore: false });
+    //   return;
+    // }
+    // // a fake async api call like which sends
+    // // 20 more records in .5 secs
+    // setTimeout(this.props.onLoad(this.props.page + 1), 500);
+    this.setState(
+      {
+        hasMore: false
+      },
+      () => this.props.onLoad(this.props.page + 1)
+    );
+  };
 
   render() {
     const {
@@ -104,16 +120,21 @@ class EmployeesList extends Component {
 
     return (
       <div className="container posts-lazy-scroll">
-        <ReduxLazyScroll
-          //pageStart={1}
-          className="listWrap"
-          isFetching={employeesStatus === "start"}
-          loadMore={this.loadItems}
-          hasMore={hasMore}
-          threshold={10}
-          useWindow={true}
-        >
-          <ul className="list">
+        <h1>InfiniteScroll with the Employee System</h1>
+        <hr />
+        <ul className="list">
+          <InfiniteScroll
+            dataLength={employees.length}
+            next={this.fetchMoreData}
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+            height={400}
+            endMessage={
+              <p style={{ textAlign: "center" }}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
+          >
             <li>
               <span>Avatar</span>
               <span onClick={this.nameSort}>
@@ -168,7 +189,6 @@ class EmployeesList extends Component {
               <span>Edit</span>
               <span>Delete</span>
             </li>
-
             {employees.map(employee => (
               <ListRow
                 key={employee._id}
@@ -179,27 +199,11 @@ class EmployeesList extends Component {
                 employeeManager={() => onManager(employee._id)}
               />
             ))}
-          </ul>
-        </ReduxLazyScroll>
-        {/* //ReduxLazyScroll */}
-        {/* //ReduxLazyScroll */}
-        <div className="row posts-lazy-scroll__messages">
-          {employeesStatus === "start" && (
-            <div className="alert alert-info"> Loading more posts... </div>
-          )}
-
-          {!hasMore && employeesStatus !== "fail" && (
-            <div className="alert alert-success">
-              All the posts has been loaded successfully.
-            </div>
-          )}
-          {employeesStatus === "fail" && (
-            <div className="alert alert-danger">Loading Error!</div>
-          )}
-        </div>
+          </InfiniteScroll>
+        </ul>
       </div>
     );
   }
 }
 
-export default EmployeesList;
+export default App1;

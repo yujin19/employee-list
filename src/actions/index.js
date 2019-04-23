@@ -58,6 +58,7 @@ export function deleteEmployee(id) {
       .then(response => {
         //dispatch(getEmployeesSuccess(response.data.employee));
         dispatch(getEmployees(1));
+        //dispatch(reset(false));
       })
       .catch(err => {
         console.log(err);

@@ -4,7 +4,9 @@ import * as actions from "../../actions";
 
 import Search from "./Search.js";
 import EmployeesList from "./EmployeesList.js";
-import { StickyContainer, Sticky } from "react-sticky";
+//import { StickyContainer, Sticky } from "react-sticky";
+import InfiniteList from "./InfiniteList";
+import App1 from "./App1.js";
 
 class Home extends Component {
   render() {
@@ -42,8 +44,6 @@ class Home extends Component {
           employeesStatus={employeesStatus}
           onLoad={getEmployees}
           onDelete={deleteEmployee}
-          //          reset={reset}
-          //          onToReset={onToReset}
           onReporters={getReporters}
           onManager={getManager}
           hasMore={hasMore}
@@ -52,6 +52,32 @@ class Home extends Component {
           sort={sort}
           setSort={setSort}
         />
+        {/* <App1
+          employees={employees}
+          employeesStatus={employeesStatus}
+          onLoad={getEmployees}
+          onDelete={deleteEmployee}
+          onReporters={getReporters}
+          onManager={getManager}
+          hasMore={hasMore}
+          page={page}
+          resultField={field}
+          sort={sort}
+          setSort={setSort}
+        /> */}
+        {/* <InfiniteList
+          employees={employees}
+          employeesStatus={employeesStatus}
+          onLoad={getEmployees}
+          onDelete={deleteEmployee}
+          onReporters={getReporters}
+          onManager={getManager}
+          hasMore={hasMore}
+          page={page}
+          resultField={field}
+          sort={sort}
+          setSort={setSort}
+        /> */}
       </div>
       // </StickyContainer>
     );
@@ -66,7 +92,9 @@ const mapStateToProps = state => {
     hasMore: state.hasMore,
     page: state.page,
     field: state.resultField,
-    sort: state.sort
+    sort: state.sort,
+    scrolling: state.scrolling,
+    totalpages: state.totalpages
   };
 };
 
